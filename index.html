@@ -53,6 +53,8 @@
   }
   button svg { width: 22px; height: 22px; display: block; }
   button:hover { background: rgba(255,255,255,0.1); }
+  button:disabled { opacity: 0.35; cursor: not-allowed; }
+  button:disabled:hover { background: transparent; }
   button.active {
     background: radial-gradient(circle, rgba(140,190,90,0.24), rgba(140,190,90,0) 75%);
     border-color: rgba(150,200,110,0.5); color: #fff;
@@ -79,7 +81,7 @@
   .caption { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.5; margin-top: 12px; }
   #magnifier { transition: opacity .3s ease; cursor: grab; touch-action: none; }
   #magnifier.dragging { cursor: grabbing; }
-  #magBioCard { transition: opacity .35s ease, transform .35s ease; }
+  #magLeaderLine { transition: opacity .35s ease; }
 </style>
 </head>
 <body>
@@ -167,35 +169,30 @@
       <g id="leftScene"></g>
       <g id="rightScene"></g>
 
+      <line id="magLeaderLine" stroke="rgba(200,225,180,0.55)" stroke-width="1.6" stroke-dasharray="5 4" stroke-linecap="round" opacity="0"></line>
+
       <g id="magnifier" opacity="0" style="display:none;">
-        <line id="magHandle" x1="114" y1="114" x2="209" y2="209" stroke="#c9c9c9" stroke-width="11" stroke-linecap="round"></line>
+        <line x1="114" y1="114" x2="209" y2="209" stroke="#c9c9c9" stroke-width="11" stroke-linecap="round"></line>
         <line x1="114" y1="114" x2="209" y2="209" stroke="rgba(0,0,0,0.35)" stroke-width="11" stroke-linecap="round" transform="translate(0,2)"></line>
         <circle r="164" fill="url(#lensGlass)" filter="url(#lensShadow)"></circle>
         <g clip-path="url(#lensClip)">
           <rect x="-164" y="-164" width="328" height="328" fill="#0c0e11"></rect>
-          <circle id="crossSectionCore" cx="0" cy="0" r="5" fill="url(#crossSectionGrad)"></circle>
-          <circle cx="0" cy="0" r="3" fill="none" stroke="rgba(90,70,40,0.5)" stroke-width="0.5"></circle>
-          <circle cx="1.5" cy="0" r="0.6" fill="rgba(160,120,70,0.6)"></circle>
-          <circle cx="-1.5" cy="0" r="0.6" fill="rgba(160,120,70,0.6)"></circle>
-          <circle cx="0" cy="1.5" r="0.6" fill="rgba(160,120,70,0.6)"></circle>
-          <circle cx="0" cy="-1.5" r="0.6" fill="rgba(160,120,70,0.6)"></circle>
-          <g id="magCellRing"></g>
-          <path id="magMembraneInner" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1"></path>
-          <path id="magMembrane" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2.2"></path>
-          <g id="magParticles"></g>
-          <rect id="magTint" x="-138" y="-64" width="272" height="128" fill="transparent" opacity="0"></rect>
+          <g transform="scale(1.4)">
+            <circle cx="0" cy="0" r="5" fill="url(#crossSectionGrad)"></circle>
+            <circle cx="0" cy="0" r="3" fill="none" stroke="rgba(90,70,40,0.5)" stroke-width="0.5"></circle>
+            <circle cx="1.5" cy="0" r="0.6" fill="rgba(160,120,70,0.6)"></circle>
+            <circle cx="-1.5" cy="0" r="0.6" fill="rgba(160,120,70,0.6)"></circle>
+            <circle cx="0" cy="1.5" r="0.6" fill="rgba(160,120,70,0.6)"></circle>
+            <circle cx="0" cy="-1.5" r="0.6" fill="rgba(160,120,70,0.6)"></circle>
+            <g id="magCellRing"></g>
+            <path id="magMembraneInner" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1"></path>
+            <path id="magMembrane" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2.2"></path>
+            <g id="magParticles"></g>
+          </g>
         </g>
         <circle r="156" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="4"></circle>
         <circle r="156" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="1" transform="translate(1.2,1.2)"></circle>
         <text id="magLabelText" y="183" text-anchor="middle" font-size="16" font-weight="600" fill="white"></text>
-        <g id="magBioCard" opacity="0">
-          <rect x="-122" y="188" width="244" height="42" rx="8" fill="rgba(15,20,12,0.88)" stroke="rgba(255,255,255,0.12)" stroke-width="1"></rect>
-          <rect id="magBioAccent" x="-122" y="188" width="3" height="42" rx="1.5" fill="rgba(139,181,98,0.9)"></rect>
-          <text id="magBioText" y="203" text-anchor="middle" font-size="11.5" font-weight="600" fill="rgba(220,235,205,0.95)">
-            <tspan id="magBioLine1" x="4" dy="0"></tspan>
-            <tspan id="magBioLine2" x="4" dy="15"></tspan>
-          </text>
-        </g>
       </g>
       <text x="240" y="472" text-anchor="middle" font-size="14" font-weight="600" fill="rgba(255,255,255,0.9)">Left Pot</text>
       <text x="240" y="490" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.65)">(Control — no support)</text>
@@ -239,7 +236,7 @@
     </button>
     <div class="slider-row">
       <svg class="mini-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.5)" stroke-width="1.6"></circle><path d="M12 7v5l3.5 2" stroke="rgba(255,255,255,0.5)" stroke-width="1.6" stroke-linecap="round"></path></svg>
-      <input type="range" id="hoursSlider" min="0" max="120" step="0.1" value="0" />
+      <input type="range" id="hoursSlider" min="0" max="250" step="0.1" value="0" />
       <span class="readout" id="hoursReadout">t = 48h</span>
     </div>
   </div>
@@ -325,10 +322,11 @@ const STICK_HEIGHT = 185; // tall enough to contain the full coil at max growth 
    Stem growth — same "straight up with organic wobble" model used
    throughout the other builds.
    ----------------------------------------------------------------------- */
-const STEM_RATE = 1.17;
-const STEM_MAX_LEN = 70; // stem stops lengthening around hour 60; further growth goes into the tendril
-const TENDRIL_RATE = 1.33;
+const STEM_RATE = 1.2126;
+const STEM_MAX_LEN = 70; // stem stops lengthening around hour 58; further growth goes into the tendril
+const TENDRIL_RATE = 0.3901; // tuned so the tendril JUST reaches the stick (coilFrac~0) at TENDRIL_ENABLE_HOUR, then coils up gradually during phase 2
 const STEPS = 90;
+const TENDRIL_ENABLE_HOUR = 109; // when the Tendril button unlocks — clicking it starts the phase-2 sweep from here
 
 function buildStemPath(originX, originY, hours, wobbleSeed) {
   const totalLen = Math.min(STEM_MAX_LEN, STEM_RATE * hours);
@@ -407,19 +405,7 @@ function buildCoiledTendril(originX, originY, totalLen, stickX, wobbleSeed) {
   return pts;
 }
 
-function lerpTendril(straightPts, coiledPts, t) {
-  const n = Math.min(straightPts.length, coiledPts.length);
-  const out = [];
-  for (let i = 0; i < n; i++) {
-    const a = straightPts[i], b = coiledPts[i];
-    out.push({
-      x: a.x + (b.x - a.x) * t,
-      y: a.y + (b.y - a.y) * t,
-      isFront: b.isFront,
-    });
-  }
-  return out;
-}
+
 
 /* -----------------------------------------------------------------------
    Rendering — pot, stick, leaflets, stem, and the tendril split into
@@ -567,13 +553,12 @@ function tendrilSegmentsMarkup(pts) {
    ----------------------------------------------------------------------- */
 let hoursState = 0;
 let playing = false, playStart = 0, playRAF = null;
-const PLAY_DURATION_MS = 22000;
-const MAX_HOURS = 120;
+const PLAY_DURATION_MS = 22000; // phase 1: 0 -> TENDRIL_ENABLE_HOUR
+const MAX_HOURS = 250;
 
-let coiling = false;
-let coilProgress = 0;
-let coilAnimRAF = null;
-const COIL_ANIM_MS = 3200;
+let coiling = false; // simple gate: has Tendril been triggered? coiling shape then follows hoursState naturally, no separate animation needed
+let tendrilPlaying = false, tendrilPlayStart = 0, tendrilPlayRAF = null;
+const TENDRIL_PLAY_DURATION_MS = 26000; // phase 2: TENDRIL_ENABLE_HOUR -> MAX_HOURS, deliberately a bit slower so students have time to watch it happen
 
 
 /* =========================================================================
@@ -583,8 +568,8 @@ const COIL_ANIM_MS = 3200;
    motion — rather than build a mismatched mesh for it, this shows the
    tendril end-on: auxin particles start clustered at the center (no
    touch stimulus yet) and migrate outward toward the periphery as
-   coilProgress increases, tracking the same state that drives the
-   coiling animation directly, so the two are always in sync.
+   the coiling phase progresses, tracking the same hours-based state
+   that drives the coil shape directly, so the two are always in sync.
    ========================================================================= */
 const MAG_PARTICLE_COUNT = 30;
 const MAG_TIP_THRESHOLD  = 198;
@@ -657,8 +642,9 @@ function initMagCellRing() {
   }
 }
 
-let magX = 150, magY = 150, magScale = 1, magDragging = false, magAnimId = null;
+let magX = 150, magY = 150, magScale = 0.75, magDragging = false, magAnimId = null;
 let tendrilPaths = {};
+let rightStickXGlobal = 0;
 const magParticles = [];
 
 function initMagParticles() {
@@ -724,16 +710,12 @@ function updateMagLabel() {
     }
   });
   const labelEl = document.getElementById("magLabelText");
-  const tintEl  = document.getElementById("magTint");
   if (best && bestDist < MAG_TIP_THRESHOLD) {
     labelEl.textContent = best.name;
-    tintEl.setAttribute("fill", "rgba(122,180,80,0.16)");
-    tintEl.setAttribute("opacity", "1");
     magOrganMatch = best;
     magMatchedPoint = bestPoint;
   } else {
     labelEl.textContent = "";
-    tintEl.setAttribute("opacity", "0");
     magOrganMatch = null;
     magMatchedPoint = null;
   }
@@ -747,13 +729,20 @@ function stepMagnifier() {
   // Control tendril never touches anything, so its cross-section always
   // reads as the unstimulated (uniform) baseline — the same "before"
   // state the experimental one starts from.
-  const localCoilProgress = isRight ? coilProgress : 0;
+  const localCoilProgress = isRight && coiling
+    ? Math.max(0, Math.min(1, (hoursState - TENDRIL_ENABLE_HOUR) / (MAX_HOURS - TENDRIL_ENABLE_HOUR)))
+    : 0;
 
-  // Ease toward the matched point's actual local orientation — reuses
-  // the isFront flag already computed for the coil geometry. Points in
-  // the straight/reaching portion (before the coil starts) don't have
-  // isFront defined, so default to normal orientation there.
-  const orientTarget = (isRight && magMatchedPoint && magMatchedPoint.isFront === false) ? -1 : 1;
+  // Ease toward the matched point's actual local orientation. The
+  // stick-contact side depends on which screen-side of the stick this
+  // point of the coil currently sits on (x vs stickX) — NOT on isFront,
+  // which only encodes rendering depth (front/back of the rotation) and
+  // is a different axis of the coil's geometry entirely; reusing it here
+  // was a real bug, since a point can be depth-"back" while still being
+  // on the same screen-side of the stick as a depth-"front" point.
+  const orientTarget = (isRight && magMatchedPoint && magMatchedPoint.isFront !== undefined)
+    ? (magMatchedPoint.x < rightStickXGlobal ? 1 : -1)
+    : 1;
   magOrientSign += (orientTarget - magOrientSign) * 0.05;
 
   // Packed capsule cells — theta=0 (right) is the contact/compact side
@@ -819,8 +808,8 @@ function stepMagnifier() {
   // Auxin migrates slowly toward the elongating zone, scattered as a
   // natural cloud rather than a clean line — each particle has its own
   // randomized angle and fixed radius jitter (not a shared radius), and
-  // eases toward its target independently of (and slower than) the
-  // coiling animation's own pace.
+  // eases toward its target independently of (and slightly lagging)
+  // the phase-2 growth sweep that actually drives localCoilProgress.
   const auxinTargetR = localCoilProgress > 0.03 ? 22 + localCoilProgress * 33 : 0; // stays inset from the membrane edge (~73 max reach)
   // Arc center rotates continuously with magOrientSign: acos(-1)=180deg
   // (normal, matches the original fixed design) through acos(1)=0deg
@@ -840,27 +829,15 @@ function stepMagnifier() {
     p.el.setAttribute("cy", y.toFixed(1));
   });
 
-  const cardEl = document.getElementById("magBioCard");
-  const line1 = document.getElementById("magBioLine1");
-  const line2 = document.getElementById("magBioLine2");
-  if (isLeft) {
-    line1.textContent = "No contact \u2014 nothing to grip";
-    line2.textContent = "Cells stay uniform, auxin centered";
-    cardEl.setAttribute("opacity", "1");
-    cardEl.setAttribute("transform", "translateY(0)");
-  } else if (isRight) {
-    if (localCoilProgress < 0.05) {
-      line1.textContent = "No contact yet";
-      line2.textContent = "Cells stay uniform, auxin centered";
-    } else {
-      line1.textContent = "High auxin \u2192 elongates (away side)";
-      line2.textContent = "Low auxin \u2192 inhibited (contact)";
-    }
-    cardEl.setAttribute("opacity", "1");
-    cardEl.setAttribute("transform", "translateY(0)");
+  const leaderEl = document.getElementById("magLeaderLine");
+  if (magOrganMatch && magMatchedPoint) {
+    leaderEl.setAttribute("x1", magX.toFixed(1));
+    leaderEl.setAttribute("y1", magY.toFixed(1));
+    leaderEl.setAttribute("x2", magMatchedPoint.x.toFixed(1));
+    leaderEl.setAttribute("y2", magMatchedPoint.y.toFixed(1));
+    leaderEl.setAttribute("opacity", "1");
   } else {
-    cardEl.setAttribute("opacity", "0");
-    cardEl.setAttribute("transform", "translateY(-6px)");
+    leaderEl.setAttribute("opacity", "0");
   }
 
   if (magnifierOn) magAnimId = requestAnimationFrame(stepMagnifier);
@@ -903,11 +880,14 @@ function render() {
   const rightTip = rightStem[rightStem.length - 1];
 
   const tendrilLen = stemTendrilLen(hoursState);
+  document.getElementById("tendrilBtn").disabled = hoursState < TENDRIL_ENABLE_HOUR && !coiling;
+  document.getElementById("playBtn").disabled = hoursState >= TENDRIL_ENABLE_HOUR;
+  document.getElementById("hoursSlider").disabled = coiling;
 
   const leftTendril = buildSearchingTendril(leftTip.x, leftTip.y, tendrilLen, 2.1);
   const rightSearching = buildSearchingTendril(rightTip.x, rightTip.y, tendrilLen, 3.4);
   const rightCoiled = buildCoiledTendril(rightTip.x, rightTip.y, tendrilLen, rightStickX, 3.4);
-  const rightTendril = lerpTendril(rightSearching, rightCoiled, coilProgress);
+  const rightTendril = coiling ? rightCoiled : rightSearching;
 
   const leftSeg = tendrilSegmentsMarkup(leftTendril);
   const rightSeg = tendrilSegmentsMarkup(rightTendril);
@@ -930,34 +910,25 @@ function render() {
   document.getElementById("hoursSlider").value = hoursState;
 
   tendrilPaths = { leftTendril, rightTendril };
+  rightStickXGlobal = rightStickX;
 
+  const overallCoilProgress = coiling
+    ? Math.max(0, Math.min(1, (hoursState - TENDRIL_ENABLE_HOUR) / (MAX_HOURS - TENDRIL_ENABLE_HOUR)))
+    : 0;
   document.getElementById("controlStat").textContent =
     "Reaching outward — no support found, keeps growing straight";
   document.getElementById("experimentalStat").textContent = !coiling
     ? "Reaching toward the stick — click Tendril to make contact"
-    : coilProgress < 0.98
-      ? `Coiling around the stick \u00b7 ${Math.round(coilProgress * 100)}% wrapped`
+    : overallCoilProgress < 0.98
+      ? `Coiling around the stick \u00b7 ${Math.round(overallCoilProgress * 100)}% wrapped`
       : "Fully coiled around the support";
 }
 
-function coilAnimFrame(now) {
-  const elapsed = now - coilAnimStart;
-  const t = Math.min(1, elapsed / COIL_ANIM_MS);
-  coilProgress = smoothstep(t);
-  render();
-  if (t < 1) {
-    coilAnimRAF = requestAnimationFrame(coilAnimFrame);
-  } else {
-    coilAnimRAF = null;
-  }
-}
-let coilAnimStart = 0;
-
 function playFrame(now) {
   const elapsed = now - playStart;
-  hoursState = Math.min(MAX_HOURS, (elapsed / PLAY_DURATION_MS) * MAX_HOURS);
+  hoursState = Math.min(TENDRIL_ENABLE_HOUR, (elapsed / PLAY_DURATION_MS) * TENDRIL_ENABLE_HOUR);
   render();
-  if (hoursState < MAX_HOURS) {
+  if (hoursState < TENDRIL_ENABLE_HOUR) {
     playRAF = requestAnimationFrame(playFrame);
   } else {
     playing = false;
@@ -966,8 +937,9 @@ function playFrame(now) {
 }
 
 function startPlay() {
+  if (hoursState >= TENDRIL_ENABLE_HOUR) return; // phase 1 is done — Tendril takes over from here
   playing = true;
-  playStart = performance.now() - (hoursState / MAX_HOURS) * PLAY_DURATION_MS;
+  playStart = performance.now() - (hoursState / TENDRIL_ENABLE_HOUR) * PLAY_DURATION_MS;
   document.getElementById("playBtn").classList.add("active");
   playRAF = requestAnimationFrame(playFrame);
 }
@@ -978,16 +950,32 @@ function stopPlay() {
   if (playRAF) cancelAnimationFrame(playRAF);
 }
 
+function tendrilPlayFrame(now) {
+  const elapsed = now - tendrilPlayStart;
+  const span = MAX_HOURS - TENDRIL_ENABLE_HOUR;
+  hoursState = Math.min(MAX_HOURS, TENDRIL_ENABLE_HOUR + (elapsed / TENDRIL_PLAY_DURATION_MS) * span);
+  render();
+  if (hoursState < MAX_HOURS) {
+    tendrilPlayRAF = requestAnimationFrame(tendrilPlayFrame);
+  } else {
+    tendrilPlaying = false;
+  }
+}
+
+function stopTendrilPlay() {
+  tendrilPlaying = false;
+  if (tendrilPlayRAF) cancelAnimationFrame(tendrilPlayRAF);
+}
+
 document.getElementById("playBtn").addEventListener("click", () => {
   if (playing) stopPlay(); else startPlay();
 });
 
 document.getElementById("resetBtn").addEventListener("click", () => {
   stopPlay();
+  stopTendrilPlay();
   hoursState = 0;
   coiling = false;
-  coilProgress = 0;
-  if (coilAnimRAF) cancelAnimationFrame(coilAnimRAF);
   document.getElementById("tendrilBtn").classList.remove("active");
   render();
   const btn = document.getElementById("resetBtn");
@@ -998,16 +986,21 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 });
 
 document.getElementById("tendrilBtn").addEventListener("click", () => {
-  if (coiling) return; // one-shot, like a real tendril's curl — Reset to replay
+  if (coiling || document.getElementById("tendrilBtn").disabled) return; // one-shot — Reset to replay
+  stopPlay();
+  hoursState = TENDRIL_ENABLE_HOUR; // start phase 2 from exactly here, regardless of how far past it the timer had scrubbed
   coiling = true;
   document.getElementById("tendrilBtn").classList.add("active");
-  coilAnimStart = performance.now();
-  if (coilAnimRAF) cancelAnimationFrame(coilAnimRAF);
-  coilAnimRAF = requestAnimationFrame(coilAnimFrame);
+  tendrilPlaying = true;
+  tendrilPlayStart = performance.now();
+  if (tendrilPlayRAF) cancelAnimationFrame(tendrilPlayRAF);
+  tendrilPlayRAF = requestAnimationFrame(tendrilPlayFrame);
+  render();
 });
 
 document.getElementById("hoursSlider").addEventListener("input", (e) => {
   stopPlay();
+  stopTendrilPlay();
   hoursState = parseFloat(e.target.value);
   render();
 });
