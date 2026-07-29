@@ -177,7 +177,7 @@
         <circle r="164" fill="url(#lensGlass)" filter="url(#lensShadow)"></circle>
         <g clip-path="url(#lensClip)">
           <rect x="-164" y="-164" width="328" height="328" fill="#0c0e11"></rect>
-          <g transform="scale(1.4)">
+          <g transform="scale(1.5)">
             <circle cx="0" cy="0" r="5" fill="url(#crossSectionGrad)"></circle>
             <circle cx="0" cy="0" r="3" fill="none" stroke="rgba(90,70,40,0.5)" stroke-width="0.5"></circle>
             <circle cx="1.5" cy="0" r="0.6" fill="rgba(160,120,70,0.6)"></circle>
@@ -642,7 +642,7 @@ function initMagCellRing() {
   }
 }
 
-let magX = 150, magY = 150, magScale = 0.75, magDragging = false, magAnimId = null;
+let magX = 150, magY = 150, magScale = 0.68, magDragging = false, magAnimId = null;
 let tendrilPaths = {};
 let rightStickXGlobal = 0;
 const magParticles = [];
@@ -679,7 +679,7 @@ function positionMagnifier() {
 }
 
 function setMagScale(delta) {
-  magScale = Math.max(0.7, Math.min(1.42, magScale + delta)); // 1.42 is the true ceiling: margin=176*scale must stay <=250 (half the 500px panel height) or the Y-drag range inverts
+  magScale = Math.max(0.6, Math.min(1.42, magScale + delta)); // 1.42 is the true ceiling: margin=176*scale must stay <=250 (half the 500px panel height) or the Y-drag range inverts
   clampMagPosition();
   positionMagnifier();
 }
